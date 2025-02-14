@@ -1,6 +1,6 @@
-package com.prafullkumar.trainx.data
+package com.prafullkumar.workout.data
 
-import com.prafullkumar.trainx.data.db.EquipmentEntity
+import com.prafullkumar.workout.data.db.EquipmentEntity
 
 data class GymEquipment(val id: Int, val name: String, val imageUrl: String) {
     fun toEquipmentEntity(): EquipmentEntity {

@@ -1,45 +1,39 @@
 package com.prafullkumar.trainx
 
 import android.app.Application
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.prafullkumar.trainx.data.OnBoardingRepository
-import com.prafullkumar.trainx.data.db.TrainXDatabase
-import kotlinx.coroutines.runBlocking
+import com.prafullkumar.workout.data.PopulatingRepository
+import com.prafullkumar.workout.workoutModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.get
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
+class DatabasePopulator(
+    private val repository: PopulatingRepository
+) {
+    suspend fun populateIfEmpty() {
+        repository.populateDatabase()
+    }
+}
 
-val appModule = module {
-    single {
-        Room.databaseBuilder(androidContext(), TrainXDatabase::class.java, "database-name")
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    super.onCreate(db)
-                    runBlocking {
-                        get<OnBoardingRepository>().populateDatabase()
-                    }
-                }
-            })
-            .build()
-    }
-    single { OnBoardingRepository() }
-    single {
-        get<TrainXDatabase>().equipmentDao()
-    }
-    single {
-        get<TrainXDatabase>().exerciseDao()
-    }
-
+// 5. Add populator to the module
+val populatorModule = module {
+    single { DatabasePopulator(get()) }
 }
 
 class TrainXApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-
+            androidContext(this@TrainXApplication)
+            modules(workoutModule, populatorModule)
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val populator = get().get<DatabasePopulator>()
+            populator.populateIfEmpty()
         }
     }
 }

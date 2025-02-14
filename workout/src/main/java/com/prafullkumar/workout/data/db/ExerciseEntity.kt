@@ -1,4 +1,4 @@
-package com.prafullkumar.trainx.data.db
+package com.prafullkumar.workout.data.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,15 +8,7 @@ import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
 @Entity(
-    tableName = "exercises",
-    foreignKeys = [
-        ForeignKey(
-            entity = EquipmentEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["equipmentUsed"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
+    tableName = "exercises"
 )
 data class ExerciseEntity(
     @PrimaryKey(autoGenerate = true)

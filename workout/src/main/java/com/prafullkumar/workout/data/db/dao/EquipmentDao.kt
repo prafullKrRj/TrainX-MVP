@@ -1,10 +1,10 @@
-package com.prafullkumar.trainx.data.db.dao
+package com.prafullkumar.workout.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.prafullkumar.trainx.data.db.EquipmentEntity
+import com.prafullkumar.workout.data.db.EquipmentEntity
 
 @Dao
 interface EquipmentDao {

@@ -1,4 +1,4 @@
-package com.prafullkumar.trainx.model
+package com.prafullkumar.workout.domain.model
 
 enum class BodyPart(val displayName: String) {
     CHEST("Chest"),

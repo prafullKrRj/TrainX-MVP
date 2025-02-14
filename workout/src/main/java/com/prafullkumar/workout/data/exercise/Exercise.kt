@@ -1,7 +1,7 @@
-package com.prafullkumar.trainx.data.exercise
+package com.prafullkumar.workout.data.exercise
 
-import com.prafullkumar.trainx.data.db.ExerciseEntity
-import com.prafullkumar.trainx.model.BodyPart
+import com.prafullkumar.workout.data.db.ExerciseEntity
+import com.prafullkumar.workout.domain.model.BodyPart
 
 data class Exercise(
     val name: String,
