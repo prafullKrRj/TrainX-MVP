@@ -17,7 +17,9 @@ class WorkoutViewModel(
     val exercises: StateFlow<List<ExerciseEntity>> = repository.exercises.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList()
     )
-
+    val equipments: StateFlow<List<EquipmentEntity>> = repository.equipments.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList()
+    )
     fun getExerciseEquipment(equipmentId: Int): Flow<EquipmentEntity> =
         repository.getExerciseEquipment(equipmentId)
 }

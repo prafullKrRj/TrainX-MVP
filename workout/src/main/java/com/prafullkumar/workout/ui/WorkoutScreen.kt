@@ -1,6 +1,5 @@
 package com.prafullkumar.workout.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,7 +21,9 @@ import org.koin.androidx.compose.getViewModel
 enum class WorkoutScreen(
     val value: String
 ) {
-    EXERCISES("Exercises"), PLANS("Plans"), CUSTOM_PLANS("Custom Plans"), HISTORY("History");
+    PLANS("Plans"), CUSTOM_PLANS("Custom Plans"), EXERCISES("Exercises"), EQUIPMENTS("Equipments"), HISTORY(
+        "History"
+    ),
 }
 
 @Composable
@@ -32,7 +32,7 @@ fun WorkoutScreen(
 ) {
     val viewModel = getViewModel<WorkoutViewModel>()
     val pagerState = rememberPagerState {
-        4
+        5
     }
     val scope = rememberCoroutineScope()
     Column(Modifier.fillMaxSize()) {
@@ -72,6 +72,8 @@ fun WorkoutScreen(
                 WorkoutScreen.HISTORY.ordinal -> {
                     WorkoutHistoryScreen(viewModel)
                 }
+
+                WorkoutScreen.EQUIPMENTS.ordinal -> EquipmentListScreen(viewModel)
             }
         }
     }

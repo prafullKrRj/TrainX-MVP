@@ -15,6 +15,9 @@ interface EquipmentDao {
     @Query("SELECT * FROM equipment")
     suspend fun getAllEquipment(): List<EquipmentEntity>
 
+    @Query("SELECT * FROM equipment")
+    fun getAllEquipmentFlow(): Flow<List<EquipmentEntity>>
+
     @Query("SELECT * FROM equipment WHERE id = :equipmentId")
     fun getEquipmentById(equipmentId: Int): Flow<EquipmentEntity>
 }

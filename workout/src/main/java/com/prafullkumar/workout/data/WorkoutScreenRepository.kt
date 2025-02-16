@@ -17,5 +17,5 @@ class WorkoutScreenRepository : KoinComponent {
     private val exerciseDao: ExerciseDao by inject()
 
     val exercises = exerciseDao.getAllExercises()
-
+    val equipments = equipmentDao.getAllEquipmentFlow()
 }
