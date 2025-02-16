@@ -27,6 +27,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.prafullkumar.foodlog.ui.FoodLogMain
+import com.prafullkumar.foodlog.FoodRoutes
 import com.prafullkumar.trainx.ui.theme.TrainXTheme
 import com.prafullkumar.workout.WorkoutRoutes
 import com.prafullkumar.workout.ui.WorkoutScreen
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = AppRoutes.Workout) {
+    NavHost(navController = navController, startDestination = AppRoutes.Food) {
         workoutRoutes(navController)
         composable<AppRoutes.Home> {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -66,6 +68,29 @@ fun MainApp() {
         composable<AppRoutes.Settings> {
             Box(modifier = Modifier.fillMaxSize()) {
                 MainScreen(AppRoutes.Settings, navController)
+            }
+        }
+    }
+}
+
+fun NavGraphBuilder.foodLogRoutes(navController: NavController) {
+    navigation<AppRoutes.Food>(startDestination = FoodRoutes.Main) {
+        composable<FoodRoutes.Main> {
+            MainScreen(AppRoutes.Food, navController)
+        }
+        composable<FoodRoutes.AddFood> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(text = "Add Food")
+            }
+        }
+        composable<FoodRoutes.FoodHistory> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(text = "Food History")
+            }
+        }
+        composable<FoodRoutes.FoodDetails> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(text = "Food Details")
             }
         }
     }
@@ -93,6 +118,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                         imageVector = Icons.Default.Home, contentDescription = "Home"
                     )
                 },
+                label = { Text("Home") }
             )
             NavigationBarItem(
                 selected = destination == AppRoutes.Food,
@@ -103,6 +129,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                         contentDescription = "Food"
                     )
                 },
+                label = { Text("Food") }
             )
             NavigationBarItem(
                 selected = destination == AppRoutes.Workout,
@@ -113,6 +140,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                         contentDescription = "Workout"
                     )
                 },
+                label = { Text("Workout") }
             )
             NavigationBarItem(
                 selected = destination == AppRoutes.Profile,
@@ -122,6 +150,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                         imageVector = Icons.Default.Person, contentDescription = "Profile"
                     )
                 },
+                label = { Text("Profile") }
             )
             NavigationBarItem(
                 selected = destination == AppRoutes.Settings,
@@ -131,6 +160,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                         imageVector = Icons.Default.Settings, contentDescription = "Settings"
                     )
                 },
+                label = { Text("Settings") }
             )
         }
     }) { innerPadding ->
@@ -147,9 +177,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                 }
 
                 AppRoutes.Food -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(text = "Food")
-                    }
+                    FoodLogMain(navController)
                 }
 
                 AppRoutes.Workout -> {

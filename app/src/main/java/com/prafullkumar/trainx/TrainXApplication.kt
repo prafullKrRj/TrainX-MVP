@@ -1,6 +1,7 @@
 package com.prafullkumar.trainx
 
 import android.app.Application
+import com.prafullkumar.foodlog.foodLogModule
 import com.prafullkumar.workout.data.PopulatingRepository
 import com.prafullkumar.workout.workoutModule
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,7 @@ class TrainXApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@TrainXApplication)
-            modules(workoutModule, populatorModule)
+            modules(workoutModule, populatorModule, foodLogModule)
         }
         CoroutineScope(Dispatchers.IO).launch {
             val populator = get().get<DatabasePopulator>()

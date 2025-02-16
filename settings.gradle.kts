@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "TrainX"
 include(":app")
 include(":workout")
+include(":foodLog")
