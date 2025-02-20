@@ -9,7 +9,7 @@ sealed interface FoodRoutes {
     data object Main : FoodRoutes
 
     @Serializable
-    data object AddFood : FoodRoutes
+    data class AddFood(val mealType: String) : FoodRoutes
 
     @Serializable
     data object FoodDetails : FoodRoutes

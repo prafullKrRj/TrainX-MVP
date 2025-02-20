@@ -23,3 +23,6 @@ rootProject.name = "TrainX"
 include(":app")
 include(":workout")
 include(":foodLog")
+include(":onBoarding")
+include(":common")
+include(":profile")

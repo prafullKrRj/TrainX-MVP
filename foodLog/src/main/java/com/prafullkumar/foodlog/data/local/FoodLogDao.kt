@@ -18,4 +18,8 @@ interface FoodLogDao {
 
     @Query("SELECT SUM(calories) FROM food_log where time BETWEEN :start AND :end")
     fun getTodayEatenCalories(start: Long, end: Long): Flow<Int>
+
+
+    @Query("DELETE FROM food_log WHERE id IN (:toList)")
+    suspend fun deleteFoodLogs(toList: List<Int>)
 }

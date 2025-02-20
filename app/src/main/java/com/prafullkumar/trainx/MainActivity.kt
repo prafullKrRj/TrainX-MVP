@@ -27,11 +27,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.prafullkumar.foodlog.ui.FoodLogMain
 import com.prafullkumar.foodlog.FoodRoutes
+import com.prafullkumar.foodlog.foodLogModule
+import com.prafullkumar.foodlog.ui.AddFoodScreen
+import com.prafullkumar.foodlog.ui.foodHistory.FoodHistoryScreen
 import com.prafullkumar.trainx.ui.theme.TrainXTheme
 import com.prafullkumar.workout.WorkoutRoutes
 import com.prafullkumar.workout.ui.WorkoutScreen
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +62,7 @@ fun MainApp() {
                 MainScreen(AppRoutes.Home, navController)
             }
         }
-        composable<AppRoutes.Food> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                MainScreen(AppRoutes.Food, navController)
-            }
-        }
+        foodLogRoutes(navController)
         composable<AppRoutes.Profile> {
             Box(modifier = Modifier.fillMaxSize()) {
                 MainScreen(AppRoutes.Profile, navController)
@@ -79,14 +82,11 @@ fun NavGraphBuilder.foodLogRoutes(navController: NavController) {
             MainScreen(AppRoutes.Food, navController)
         }
         composable<FoodRoutes.AddFood> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Text(text = "Add Food")
-            }
+            val mealType = it.toRoute<FoodRoutes.AddFood>().mealType
+            AddFoodScreen(koinViewModel{ parametersOf(mealType) }, navController)
         }
         composable<FoodRoutes.FoodHistory> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Text(text = "Food History")
-            }
+            FoodHistoryScreen(koinViewModel(), navController)
         }
         composable<FoodRoutes.FoodDetails> {
             Box(modifier = Modifier.fillMaxSize()) {

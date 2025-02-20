@@ -1,5 +1,6 @@
 package com.prafullkumar.foodlog.data
 
+import android.util.Log
 import com.prafullkumar.foodlog.data.local.FoodLogDao
 import com.prafullkumar.foodlog.data.local.FoodLogEntity
 import com.prafullkumar.foodlog.domain.FoodLogRepository
@@ -24,6 +25,11 @@ class FoodLogRepositoryImpl(
 
     override fun deleteFoodLog(food: FoodLogEntity) {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFoodLogs(list: List<Int>) {
+        Log.d("FoodLogRepositoryImpl", "deleteFoodLogs: $list")
+        foodLogDao.deleteFoodLogs(list)
     }
 }
 fun Long.startOfDay(): Long {

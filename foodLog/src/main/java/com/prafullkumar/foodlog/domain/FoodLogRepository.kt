@@ -12,4 +12,6 @@ interface FoodLogRepository {
     fun getTodayCalories(): Flow<Int>
 
     fun deleteFoodLog(food: FoodLogEntity)
+
+    suspend fun deleteFoodLogs(list: List<Int>)
 }
