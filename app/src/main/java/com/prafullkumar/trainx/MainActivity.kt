@@ -1,5 +1,6 @@
 package com.prafullkumar.trainx
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -28,15 +30,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.prafullkumar.foodlog.ui.FoodLogMain
 import com.prafullkumar.foodlog.FoodRoutes
-import com.prafullkumar.foodlog.foodLogModule
 import com.prafullkumar.foodlog.ui.AddFoodScreen
+import com.prafullkumar.foodlog.ui.FoodLogMain
 import com.prafullkumar.foodlog.ui.foodHistory.FoodHistoryScreen
+import com.prafullkumar.onboarding.OnBoardingNavigation
+import com.prafullkumar.profile.ProfileScreen
 import com.prafullkumar.trainx.ui.theme.TrainXTheme
 import com.prafullkumar.workout.WorkoutRoutes
 import com.prafullkumar.workout.ui.WorkoutScreen
-import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -46,8 +48,33 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TrainXTheme {
-                MainApp()
+                MainNavigation()
             }
+        }
+    }
+}
+
+@Composable
+fun MainNavigation() {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+    val onBoarded = context.getSharedPreferences("trainX", Context.MODE_PRIVATE)
+        .getBoolean("onboarded", false)
+    NavHost(
+        startDestination = if (onBoarded) MainRoutes.App else MainRoutes.OnBoarding,
+        navController = navController
+    ) {
+        composable<MainRoutes.OnBoarding> {
+            OnBoardingNavigation {
+                navController.navigate(MainRoutes.App) {
+                    popUpTo(MainRoutes.OnBoarding) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+        composable<MainRoutes.App> {
+            MainApp()
         }
     }
 }
@@ -55,7 +82,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = AppRoutes.Food) {
+    NavHost(navController = navController, startDestination = AppRoutes.Profile) {
         workoutRoutes(navController)
         composable<AppRoutes.Home> {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -64,9 +91,7 @@ fun MainApp() {
         }
         foodLogRoutes(navController)
         composable<AppRoutes.Profile> {
-            Box(modifier = Modifier.fillMaxSize()) {
-                MainScreen(AppRoutes.Profile, navController)
-            }
+            MainScreen(AppRoutes.Profile, navController)
         }
         composable<AppRoutes.Settings> {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +108,7 @@ fun NavGraphBuilder.foodLogRoutes(navController: NavController) {
         }
         composable<FoodRoutes.AddFood> {
             val mealType = it.toRoute<FoodRoutes.AddFood>().mealType
-            AddFoodScreen(koinViewModel{ parametersOf(mealType) }, navController)
+            AddFoodScreen(koinViewModel { parametersOf(mealType) }, navController)
         }
         composable<FoodRoutes.FoodHistory> {
             FoodHistoryScreen(koinViewModel(), navController)
@@ -185,9 +210,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                 }
 
                 AppRoutes.Profile -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(text = "Profile")
-                    }
+                    ProfileScreen(navController)
                 }
 
                 AppRoutes.Settings -> {
