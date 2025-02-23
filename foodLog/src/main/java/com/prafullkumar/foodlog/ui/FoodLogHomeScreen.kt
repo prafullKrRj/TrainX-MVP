@@ -66,6 +66,7 @@ fun FoodLogHome(mainViewModel: FoodLogMainViewModel, navController: NavControlle
 fun MealTypeSection(
     mealType: MealType, viewModel: FoodLogMainViewModel, navController: NavController
 ) {
+    val mealCalories by viewModel.todayFoods.collectAsState()
     ElevatedCard(
         modifier = Modifier.fillMaxWidth(), onClick = {
 
@@ -93,7 +94,9 @@ fun MealTypeSection(
                         text = mealType.name
                     )
                 }
-                Text("0 kcal")
+                Text("${
+                    mealCalories.filter { it.mealType == mealType.name }.sumOf { it.calories }
+                } kcal")
             }
             FilledIconButton(
                 onClick = {
@@ -113,6 +116,8 @@ fun CalorieDetails(
     viewModel: FoodLogMainViewModel
 ) {
     val currentEatenCalories by viewModel.currentEatenCalories.collectAsState()
+    val todayFoods by viewModel.todayFoods.collectAsState()
+    val tdeeData by viewModel.tdeeData.collectAsState()
     Card(
         shape = RoundedCornerShape(32.dp), modifier = Modifier.fillMaxWidth()
     ) {
@@ -132,12 +137,12 @@ fun CalorieDetails(
                 )
                 Row {
                     Text(
-                        text = viewModel.goalCalories
+                        text = tdeeData.tdee.toString() + " kcal"
                     )
                 }
             }
             CurrentEatenCaloriesBox(currentEatenCalories)
-            CurrentMacrosSection(0, 0, 0)
+            CurrentMacrosSection(todayFoods.sumOf { it.carbs }, todayFoods.sumOf { it.protein }, todayFoods.sumOf { it.fats })
         }
     }
 }

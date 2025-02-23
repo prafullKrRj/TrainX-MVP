@@ -1,12 +1,13 @@
 package com.prafullkumar.trainx
 
 import android.app.Application
-import com.prafullkumar.foodlog.foodLogModule
-import com.prafullkumar.workout.data.PopulatingRepository
-import com.prafullkumar.workout.workoutModule
 import com.prafullkumar.common.commonModule
+import com.prafullkumar.foodlog.foodLogModule
 import com.prafullkumar.onboarding.onBoardingModule
 import com.prafullkumar.profile.profileModule
+import com.prafullkumar.trainx.home.homeModule
+import com.prafullkumar.workout.data.PopulatingRepository
+import com.prafullkumar.workout.workoutModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +33,15 @@ class TrainXApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@TrainXApplication)
-            modules(commonModule, onBoardingModule, workoutModule, populatorModule, foodLogModule, profileModule)
+            modules(
+                commonModule,
+                homeModule,
+                onBoardingModule,
+                workoutModule,
+                populatorModule,
+                foodLogModule,
+                profileModule
+            )
         }
         CoroutineScope(Dispatchers.IO).launch {
             val populator = get().get<DatabasePopulator>()

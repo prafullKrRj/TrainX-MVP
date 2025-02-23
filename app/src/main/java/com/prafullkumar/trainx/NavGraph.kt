@@ -27,6 +27,6 @@ sealed interface AppRoutes {
     data object Home : AppRoutes
 
     @Serializable
-    data object Settings : AppRoutes
+    data object TrainXAi : AppRoutes
 }
 

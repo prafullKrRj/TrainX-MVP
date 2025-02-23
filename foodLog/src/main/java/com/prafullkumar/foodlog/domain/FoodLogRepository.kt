@@ -14,4 +14,6 @@ interface FoodLogRepository {
     fun deleteFoodLog(food: FoodLogEntity)
 
     suspend fun deleteFoodLogs(list: List<Int>)
+
+    fun getTdeeData(): Flow<TDEEData>
 }

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,6 +35,7 @@ import com.prafullkumar.foodlog.ui.FoodLogMain
 import com.prafullkumar.foodlog.ui.foodHistory.FoodHistoryScreen
 import com.prafullkumar.onboarding.OnBoardingNavigation
 import com.prafullkumar.profile.ProfileScreen
+import com.prafullkumar.trainx.home.HomeScreen
 import com.prafullkumar.trainx.ui.theme.TrainXTheme
 import com.prafullkumar.workout.WorkoutRoutes
 import com.prafullkumar.workout.ui.WorkoutScreen
@@ -82,7 +82,7 @@ fun MainNavigation() {
 @Composable
 fun MainApp() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = AppRoutes.Profile) {
+    NavHost(navController = navController, startDestination = AppRoutes.Home) {
         workoutRoutes(navController)
         composable<AppRoutes.Home> {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -93,9 +93,9 @@ fun MainApp() {
         composable<AppRoutes.Profile> {
             MainScreen(AppRoutes.Profile, navController)
         }
-        composable<AppRoutes.Settings> {
+        composable<AppRoutes.TrainXAi> {
             Box(modifier = Modifier.fillMaxSize()) {
-                MainScreen(AppRoutes.Settings, navController)
+                MainScreen(AppRoutes.TrainXAi, navController)
             }
         }
     }
@@ -178,14 +178,15 @@ fun MainScreen(destination: Any, navController: NavController) {
                 label = { Text("Profile") }
             )
             NavigationBarItem(
-                selected = destination == AppRoutes.Settings,
-                onClick = { navController.navigate(AppRoutes.Settings) },
+                selected = destination == AppRoutes.TrainXAi,
+                onClick = { navController.navigate(AppRoutes.TrainXAi) },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Settings, contentDescription = "Settings"
+                        imageVector = ImageVector.vectorResource(R.drawable.baseline_cloud_queue_24),
+                        contentDescription = "TrainXAi"
                     )
                 },
-                label = { Text("Settings") }
+                label = { Text("TrainXAi") }
             )
         }
     }) { innerPadding ->
@@ -196,9 +197,7 @@ fun MainScreen(destination: Any, navController: NavController) {
         ) {
             when (destination) {
                 AppRoutes.Home -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Text(text = "Home")
-                    }
+                    HomeScreen(koinViewModel())
                 }
 
                 AppRoutes.Food -> {
@@ -213,7 +212,7 @@ fun MainScreen(destination: Any, navController: NavController) {
                     ProfileScreen(navController)
                 }
 
-                AppRoutes.Settings -> {
+                AppRoutes.TrainXAi -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Text(text = "Settings")
                     }

@@ -26,6 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.prafullkumar.foodlog.data.local.FoodLogEntity
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -55,59 +59,79 @@ fun FoodCard(
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor.value)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = foodLog.foodName,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text =
-                    foodLog.mealType,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    NutrientChip(
-                        label = "Protein",
-                        value = "${foodLog.protein}g",
+        Column(Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = foodLog.foodName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text =
+                        foodLog.mealType,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(
+                        modifier = Modifier.height(8.dp)
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        NutrientChip(
+                            label = "Protein",
+                            value = "${foodLog.protein}g",
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        NutrientChip(
+                            label =
+                            "Carbs",
+                            value = "${foodLog.carbs}g",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                        NutrientChip(
+                            label = "Fats",
+                            value = "${foodLog.fats}g",
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "${foodLog.calories}",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    NutrientChip(
-                        label =
-                        "Carbs",
-                        value = "${foodLog.carbs}g",
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                    NutrientChip(
-                        label = "Fats",
-                        value = "${foodLog.fats}g",
-                        color = MaterialTheme.colorScheme.tertiary
+                    Text(
+                        text =
+                        "kcal",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
-            Column(horizontalAlignment = Alignment.End) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Text(
-                    text = "${foodLog.calories}",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text =
-                    "kcal",
+                    text = LocalDateTime.ofInstant(
+                        Instant.ofEpochMilli(foodLog.time),
+                        ZoneId.systemDefault()
+                    ).let { dateTime ->
+                        val today = LocalDateTime.now()
+                        if (dateTime.toLocalDate() == today.toLocalDate()) {
+                            DateTimeFormatter.ofPattern("hh:mm a").format(dateTime)
+                        } else {
+                            DateTimeFormatter.ofPattern("MMM dd, hh:mm a").format(dateTime)
+                        }
+                    },
                     style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

@@ -13,7 +13,7 @@ interface FoodLogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFoodLog(foodLogEntity: FoodLogEntity): Long
 
-    @Query("SELECT * FROM food_log")
+    @Query("SELECT * FROM food_log order by time desc")
     fun getAllFoodLogs(): Flow<List<FoodLogEntity>>
 
     @Query("SELECT SUM(calories) FROM food_log where time BETWEEN :start AND :end")
@@ -22,4 +22,7 @@ interface FoodLogDao {
 
     @Query("DELETE FROM food_log WHERE id IN (:toList)")
     suspend fun deleteFoodLogs(toList: List<Int>)
+
+    @Query("SELECT * FROM food_log WHERE time BETWEEN :start AND :end")
+    fun getTodayFoodLogs(start: Long, end: Long): Flow<List<FoodLogEntity>>
 }
